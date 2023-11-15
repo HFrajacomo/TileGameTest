@@ -14,7 +14,7 @@ public class Quad{
 	public void Build(Vector3 pos, GameObject preset, Material[] mat){
 		if(!this.built){
 			this.obj = GameObject.Instantiate(preset, pos, Quaternion.Euler(90, 0, 0));
-			this.obj.GetComponent<MeshRenderer>().material = mat[this.type];
+			this.obj.GetComponent<MeshRenderer>().material = Material.Instantiate(mat[this.type]);
 			this.built = true;
 		}
 			
