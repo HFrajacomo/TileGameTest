@@ -45,7 +45,9 @@ public abstract class Quad{
 	public void Build(Vector3 pos, GameObject preset, Material[] mat){
 		if(!this.built){
 			this.obj = GameObject.Instantiate(preset, pos, Quaternion.Euler(90, 0, 0));
+			this.obj.name = this.GetBiome().ToString() + " (" + (int)pos.x + ", " + (int)pos.z + ")";
 			this.obj.GetComponent<MeshRenderer>().material = Material.Instantiate(mat[(int)this.type]);
+
 			this.built = true;
 		}	
 	}
