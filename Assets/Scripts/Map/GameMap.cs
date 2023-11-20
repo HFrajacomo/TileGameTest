@@ -5,6 +5,7 @@ public class GameMap : MonoBehaviour{
 
 	[Header("Prefabs")]
 	public GameObject quadPreset;
+	public GameObject parent;
 
 	[Header("Quad Materials")]
 	public Material[] materials;
@@ -42,7 +43,7 @@ public class GameMap : MonoBehaviour{
 	public int GetSize(){return this.size;}
 
 	public void BuildQuad(int x, int y){
-		this.map[x*this.size+y].Build(CalculateQuadPosition(x*this.size+y), this.quadPreset, this.materials);
+		this.map[x*this.size+y].Build(CalculateQuadPosition(x*this.size+y), this.quadPreset, this.parent, this.materials);
 	}
 
 	private Vector3 CalculateQuadPosition(int index){

@@ -42,11 +42,12 @@ public abstract class Quad{
 	public int GetT(){return (int)this.type;}
 	public Biome GetBiome(){return this.type;}
 
-	public void Build(Vector3 pos, GameObject preset, Material[] mat){
+	public void Build(Vector3 pos, GameObject preset, GameObject parent, Material[] mat){
 		if(!this.built){
 			this.obj = GameObject.Instantiate(preset, pos, Quaternion.Euler(90, 0, 0));
 			this.obj.name = this.GetBiome().ToString() + " (" + (int)pos.x + ", " + (int)pos.z + ")";
 			this.obj.GetComponent<MeshRenderer>().material = Material.Instantiate(mat[(int)this.type]);
+			this.obj.transform.SetParent(parent.transform);
 
 			this.built = true;
 		}	

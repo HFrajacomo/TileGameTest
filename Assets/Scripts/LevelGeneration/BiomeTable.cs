@@ -16,7 +16,7 @@ public class BiomeTable {
     }
 
     private void SetupIntensityArray(){
-        this.intensityArray = new BiomeType[]{BiomeType.LOW, BiomeType.LOW, BiomeType.MID, BiomeType.MID, BiomeType.MID, BiomeType.MID, BiomeType.MID, BiomeType.HIGH, BiomeType.HIGH, BiomeType.HIGH};
+        this.intensityArray = new BiomeType[]{BiomeType.LOW, BiomeType.LOW, BiomeType.LOW, BiomeType.LOW, BiomeType.MID, BiomeType.MID, BiomeType.MID, BiomeType.HIGH, BiomeType.HIGH, BiomeType.HIGH};
 	}
 
 	private void SetupContinentalArray(){
@@ -31,10 +31,10 @@ public class BiomeTable {
             {Biome.PLAINS, Biome.PLAINS, Biome.PLAINS, Biome.PLAINS, Biome.PLAINS, Biome.PLAINS, Biome.PLAINS, Biome.PLAINS, Biome.PLAINS, Biome.PLAINS},
             {Biome.PLAINS, Biome.PLAINS, Biome.PLAINS, Biome.PLAINS, Biome.PLAINS, Biome.PLAINS, Biome.PLAINS, Biome.PLAINS, Biome.PLAINS, Biome.PLAINS},
             {Biome.PLAINS, Biome.PLAINS, Biome.PLAINS, Biome.PLAINS, Biome.PLAINS, Biome.PLAINS, Biome.PLAINS, Biome.PLAINS, Biome.PLAINS, Biome.PLAINS},
-            {Biome.PLAINS, Biome.PLAINS, Biome.PLAINS, Biome.PLAINS, Biome.PLAINS, Biome.BADLANDS, Biome.BADLANDS, Biome.BADLANDS, Biome.BADLANDS, Biome.BADLANDS},
-            {Biome.PLAINS, Biome.PLAINS, Biome.PLAINS, Biome.PLAINS, Biome.BADLANDS, Biome.BADLANDS, Biome.BADLANDS, Biome.BADLANDS, Biome.BADLANDS, Biome.BADLANDS},
-            {Biome.PLAINS, Biome.PLAINS, Biome.PLAINS, Biome.BADLANDS, Biome.BADLANDS, Biome.BADLANDS, Biome.BADLANDS, Biome.BADLANDS, Biome.PLAINS, Biome.PLAINS},
-            {Biome.PLAINS, Biome.PLAINS, Biome.BADLANDS, Biome.BADLANDS, Biome.BADLANDS, Biome.PLAINS, Biome.PLAINS, Biome.PLAINS, Biome.PLAINS, Biome.PLAINS},
+            {Biome.PLAINS, Biome.PLAINS, Biome.PLAINS, Biome.PLAINS, Biome.PLAINS, Biome.PLAINS, Biome.PLAINS, Biome.PLAINS, Biome.BADLANDS, Biome.BADLANDS},
+            {Biome.PLAINS, Biome.PLAINS, Biome.PLAINS, Biome.PLAINS, Biome.PLAINS, Biome.PLAINS, Biome.BADLANDS, Biome.BADLANDS, Biome.BADLANDS, Biome.BADLANDS},
+            {Biome.PLAINS, Biome.PLAINS, Biome.PLAINS, Biome.PLAINS, Biome.PLAINS, Biome.BADLANDS, Biome.BADLANDS, Biome.BADLANDS, Biome.PLAINS, Biome.PLAINS},
+            {Biome.PLAINS, Biome.PLAINS, Biome.PLAINS, Biome.PLAINS, Biome.BADLANDS, Biome.PLAINS, Biome.PLAINS, Biome.PLAINS, Biome.PLAINS, Biome.PLAINS},
         };
 
         this.midBaseNeighborTable = new Biome[,]{

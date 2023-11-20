@@ -20,32 +20,50 @@ public class MapGenerator : MonoBehaviour {
 	private int seed = 0;
     private int mapSize = 10;
 
-	private static float BASE_X_STEP = 0.163f;
-	private static float BASE_Y_STEP = 0.151f;
+	private static float BASE_X_STEP = 0.193f;
+	private static float BASE_Y_STEP = 0.171f;
+    private static float BASE_INIT_X_STEP;
+    private static float BASE_INIT_Y_STEP;
 
-	private static float INT_X_STEP = 0.143f;
-	private static float INT_Y_STEP = 0.127f;
+	private static float INT_X_STEP = 0.243f;
+	private static float INT_Y_STEP = 0.227f;
+    private static float INT_INIT_X_STEP;
+    private static float INT_INIT_Y_STEP;
 
 	private static float NEI_X_STEP = 0.111f;
 	private static float NEI_Y_STEP = 0.097f;
+    private static float NEI_INIT_X_STEP;
+    private static float NEI_INIT_Y_STEP;
 
     private static float CON_X_STEP;
     private static float CON_Y_STEP;
+    private static float CON_INIT_X_STEP;
+    private static float CON_INIT_Y_STEP;
 
     public void SetNoiseMaps(){
     	this.rng = new Random(this.seed);
 
     	BASE_X_STEP += (float)(this.rng.NextDouble()/10);
     	BASE_Y_STEP += (float)(this.rng.NextDouble()/10);
+        BASE_INIT_X_STEP = (float)(this.rng.NextDouble());
+        BASE_INIT_Y_STEP = (float)(this.rng.NextDouble());
 
     	INT_X_STEP += (float)(this.rng.NextDouble()/10);
     	INT_Y_STEP += (float)(this.rng.NextDouble()/10);
+        INT_INIT_X_STEP = (float)(this.rng.NextDouble());
+        INT_INIT_Y_STEP = (float)(this.rng.NextDouble());
 
     	NEI_X_STEP += (float)(this.rng.NextDouble()/7);
     	NEI_Y_STEP += (float)(this.rng.NextDouble()/7);
+        NEI_INIT_X_STEP = (float)(this.rng.NextDouble());
+        NEI_INIT_Y_STEP = (float)(this.rng.NextDouble());
 
-        CON_X_STEP = 1/(this.mapSize*2)+(float)(this.rng.NextDouble()/12);
-        CON_Y_STEP = 1/(this.mapSize*2)+(float)(this.rng.NextDouble()/12);
+
+        CON_X_STEP = (1/this.mapSize)+(float)(this.rng.NextDouble()/2);
+        CON_Y_STEP = (1/this.mapSize)+(float)(this.rng.NextDouble()/2);
+        CON_INIT_X_STEP = (float)(this.rng.NextDouble());
+        CON_INIT_Y_STEP = (float)(this.rng.NextDouble());
+
 
         // Base Noise
         for(int i=0; i < 256; i++){
@@ -79,14 +97,16 @@ public class MapGenerator : MonoBehaviour {
     public void SetSize(int size){this.mapSize = size;}
 
     public Quad CreateQuad(int x, int y){
-    	float baseResult = baseSpline.Evaluate(NoiseMaker.Noise2D(x*BASE_X_STEP, y*BASE_Y_STEP, this.baseMap));
-    	float intensityResult = intensitySpline.Evaluate(NoiseMaker.Noise2D(x*INT_X_STEP, y*INT_Y_STEP, this.intensityMap));
-    	float neighborResult = NoiseMaker.Noise2D(x*NEI_X_STEP, y*NEI_Y_STEP, this.neighborMap);
-        float continentalResult = NoiseMaker.Noise2D(x*CON_X_STEP, y*NEI_Y_STEP, this.continentalMap);
+    	float baseResult = baseSpline.Evaluate(NoiseMaker.Noise2D(x*BASE_X_STEP + BASE_INIT_X_STEP, y*BASE_Y_STEP + BASE_INIT_Y_STEP, this.baseMap));
+    	float intensityResult = intensitySpline.Evaluate(NoiseMaker.Noise2D(x*INT_X_STEP + INT_INIT_X_STEP, y*INT_Y_STEP + INT_INIT_Y_STEP, this.intensityMap));
+    	float neighborResult = NoiseMaker.Noise2D(x*NEI_X_STEP + NEI_INIT_X_STEP, y*NEI_Y_STEP + NEI_INIT_Y_STEP, this.neighborMap);
+        float continentalResult = NoiseMaker.Noise2D(x*CON_X_STEP + CON_INIT_X_STEP, y*CON_Y_STEP + CON_INIT_Y_STEP, this.continentalMap);
 
         float4 noises = new float4(baseResult, intensityResult, neighborResult, continentalResult);
 
         Biome generatedBiome = this.biomeTable.GetBiome(noises);
+
+        Debug.Log(noises);
 
         return Quad.Create(generatedBiome);
     }
