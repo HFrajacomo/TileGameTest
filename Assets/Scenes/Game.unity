@@ -308,6 +308,8 @@ MonoBehaviour:
   down: 0
   primary: 0
   secondary: 0
+  rotateLeft: 0
+  rotateRight: 0
   mouseX: 0
   mouseY: 0
   scroll: 0

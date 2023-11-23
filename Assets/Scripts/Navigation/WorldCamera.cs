@@ -3,25 +3,17 @@ using UnityEngine;
 public class WorldCamera : MonoBehaviour{
 	public Camera cam;
 	public MainControllerManager controller;
-	private float acceleration = .04f;
-	private float maxSpeed = .3f;
-	private float frames_divider = 1.4f;
 
-	private int mouseSensitivityX = 120;
-	private int mouseSensitivityZ = 120;
-	private int scrollSensitivity = 10;
+	private float acceleration = .02f;
+	private float rotAcceleration = 1f;
 
-	//private int maxHeight = 5;
-	//private int minHeight = 2;
 
 	private Vector2 move = new Vector2(0,0);
-	private float xRotation = 0f;
-	private float zRotation = 0f;
-	//private float yMove = 0f;
-
 	private Vector3 movement = new Vector3(0,0,0);
 
-	private bool IS_MOVING = false;
+	private bool IS_MOVING_X = false;
+	private bool IS_MOVING_Y = false;
+	private Vector3 cachedVector;
 
 	void Update(){
 		if(controller.left)
@@ -32,82 +24,77 @@ public class WorldCamera : MonoBehaviour{
 			MoveUp();
 		if(controller.down)
 			MoveDown();
-		if(controller.secondary){
-			LockCursor();
-			Rotate();
+		if(controller.rotateLeft){
+			RotateLeft();
 		}
-		else{
-			UnlockCursor();
+		if(controller.rotateRight){
+			RotateRight();
 		}
 
 		Move();
 
-		IS_MOVING = false;
+		IS_MOVING_X = false;
+		IS_MOVING_Y = false;
 	}
 
 	private void Move(){
-		if(this.move.magnitude == 0 && controller.scroll == 0)
+		if(!IS_MOVING_X && !IS_MOVING_Y)
 			return;
-		if(!IS_MOVING)
-			this.move /= this.frames_divider;
-		if(this.move.magnitude < 0.0002)
-			this.move = new Vector2(0,0);
 
-		this.movement = this.cam.transform.right * this.move.x + this.cam.transform.forward * this.move.y + Vector3.up * (controller.scroll / this.scrollSensitivity);
-		this.movement = new Vector3(this.movement.x*Limit1(this.movement.y), this.movement.y, this.movement.z*Limit1(this.movement.y));
+		if(!IS_MOVING_X)
+			this.move.x = 0f;
+		if(!IS_MOVING_Y)
+			this.move.y = 0f;
+
+        this.cachedVector = new Vector3(move.x, 0f, move.y).normalized;
+        this.cachedVector = Quaternion.Euler(0, transform.eulerAngles.y, 0) * this.cachedVector;
+        this.cam.transform.Translate(this.cachedVector * acceleration, Space.World);
+
+		/*
+
+		this.cachedVector = new Vector3(this.cam.transform.forward.x , 0, 0);//this.cam.transform.forward.z - this.cam.transform.forward.y);
+
+		this.movement = this.move.x * this.cam.transform.right + this.move.y * this.cachedVector;
+		this.movement = new Vector3(this.movement.x, 0, this.movement.z);
 
 		this.cam.transform.position = new Vector3(this.cam.transform.position.x + this.movement.x, 3, this.cam.transform.position.z + this.movement.z);
+		*/
 	}
 
 	private void MoveLeft(){
-		this.move.x -= this.acceleration * Time.deltaTime;
-		
-		if(this.move.x < -this.maxSpeed)
-			this.move.x = -this.maxSpeed;
+		this.move.x = -this.acceleration;
 
-		IS_MOVING = true;
+		IS_MOVING_X = true;
 	}
 
 	private void MoveRight(){
-		this.move.x += this.acceleration * Time.deltaTime;
-		
-		if(this.move.x > this.maxSpeed)
-			this.move.x = this.maxSpeed;
+		this.move.x = this.acceleration;
 
-		IS_MOVING = true;
+		IS_MOVING_X = true;
 
 	}
 
 	private void MoveUp(){
-		this.move.y += this.acceleration * Time.deltaTime;
-		
-		if(this.move.y > this.maxSpeed)
-			this.move.y = this.maxSpeed;
+		this.move.y = this.acceleration;
 
-		IS_MOVING = true;
+		IS_MOVING_Y = true;
 
 	}
 
 	private void MoveDown(){
-		this.move.y -= this.acceleration * Time.deltaTime;
-		
-		if(this.move.y < -this.maxSpeed)
-			this.move.y = -this.maxSpeed;
+		this.move.y = -this.acceleration;
 
-		IS_MOVING = true;
+		IS_MOVING_Y = true;
 
 	}
 
-	private void Rotate(){
-        float mouseX = controller.mouseX * this.mouseSensitivityX * Time.deltaTime;
-        float mouseY = controller.mouseY * this.mouseSensitivityZ * Time.deltaTime;
+	private void RotateRight(){
+        this.cam.transform.localRotation = Quaternion.Euler(this.cam.transform.localEulerAngles.x, this.cam.transform.localEulerAngles.y + this.rotAcceleration, this.cam.transform.localEulerAngles.z);
+	}
 
-        this.xRotation -= mouseY;
-        this.xRotation = Mathf.Clamp(this.xRotation, 30f, 90f);
-        this.zRotation += mouseX;
-        this.zRotation = Mathf.Clamp(zRotation, -90f, 90f);
+	private void RotateLeft(){
+        this.cam.transform.localRotation = Quaternion.Euler(this.cam.transform.localEulerAngles.x, this.cam.transform.localEulerAngles.y - this.rotAcceleration, this.cam.transform.localEulerAngles.z);
 
-        this.cam.transform.localRotation = Quaternion.Euler(this.xRotation, this.zRotation, 0);
 	}
 
 	private void LockCursor(){

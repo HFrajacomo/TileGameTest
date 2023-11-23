@@ -9,6 +9,8 @@ public class MainControllerManager : MonoBehaviour
     public bool down = false;
     public bool primary = false;
     public bool secondary = false;
+    public bool rotateLeft = false;
+    public bool rotateRight = false;
     public float mouseX = 0f;
     public float mouseY = 0f;
     public float scroll = 0f;
@@ -48,6 +50,18 @@ public class MainControllerManager : MonoBehaviour
             this.secondary = true;
         else
             this.secondary = false;
+    }
+    public void OnRotateLeft(){
+        if(!this.rotateLeft)
+            this.rotateLeft = true;
+        else
+            this.rotateLeft = false;
+    }
+    public void OnRotateRight(){
+        if(!this.rotateRight)
+            this.rotateRight = true;
+        else
+            this.rotateRight = false;
     }
     public void OnMouseLook(InputValue val){
         this.mouseX = val.Get<Vector2>().x;

@@ -106,8 +106,6 @@ public class MapGenerator : MonoBehaviour {
 
         Biome generatedBiome = this.biomeTable.GetBiome(noises);
 
-        Debug.Log(noises);
-
         return Quad.Create(generatedBiome);
     }
 
