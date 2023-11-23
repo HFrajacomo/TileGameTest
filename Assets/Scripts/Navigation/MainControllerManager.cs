@@ -13,7 +13,7 @@ public class MainControllerManager : MonoBehaviour
     public bool rotateRight = false;
     public float mouseX = 0f;
     public float mouseY = 0f;
-    public float scroll = 0f;
+    public float mouseScroll = 0f;
 
     public void OnMoveLeft(){
         if(!this.left)
@@ -68,6 +68,7 @@ public class MainControllerManager : MonoBehaviour
         this.mouseY = val.Get<Vector2>().y;
     }
     public void OnMouseScroll(InputValue val){
-        this.scroll = val.Get<float>();
+        this.mouseScroll = val.Get<float>()/120;
+        Debug.Log(this.mouseScroll);
     }
 }

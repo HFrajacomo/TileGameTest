@@ -4,9 +4,13 @@ public class WorldCamera : MonoBehaviour{
 	public Camera cam;
 	public MainControllerManager controller;
 
-	private float acceleration = .02f;
+	private float acceleration = .03f;
 	private float rotAcceleration = 1f;
+	private float scrollAcceleration = 0.1f;
 
+
+	private float maxY = 8f;
+	private float minY = 1.5f;
 
 	private Vector2 move = new Vector2(0,0);
 	private Vector3 movement = new Vector3(0,0,0);
@@ -30,6 +34,9 @@ public class WorldCamera : MonoBehaviour{
 		if(controller.rotateRight){
 			RotateRight();
 		}
+		if(controller.mouseScroll != 0){
+			Scroll();
+		}
 
 		Move();
 
@@ -49,16 +56,6 @@ public class WorldCamera : MonoBehaviour{
         this.cachedVector = new Vector3(move.x, 0f, move.y).normalized;
         this.cachedVector = Quaternion.Euler(0, transform.eulerAngles.y, 0) * this.cachedVector;
         this.cam.transform.Translate(this.cachedVector * acceleration, Space.World);
-
-		/*
-
-		this.cachedVector = new Vector3(this.cam.transform.forward.x , 0, 0);//this.cam.transform.forward.z - this.cam.transform.forward.y);
-
-		this.movement = this.move.x * this.cam.transform.right + this.move.y * this.cachedVector;
-		this.movement = new Vector3(this.movement.x, 0, this.movement.z);
-
-		this.cam.transform.position = new Vector3(this.cam.transform.position.x + this.movement.x, 3, this.cam.transform.position.z + this.movement.z);
-		*/
 	}
 
 	private void MoveLeft(){
@@ -86,6 +83,15 @@ public class WorldCamera : MonoBehaviour{
 
 		IS_MOVING_Y = true;
 
+	}
+
+	private void Scroll(){
+		if(this.cam.transform.localPosition.y - this.scrollAcceleration <= this.minY && controller.mouseScroll < 0)
+			return;
+		if(this.cam.transform.localPosition.y + this.scrollAcceleration >= this.maxY && controller.mouseScroll > 0)
+			return;
+
+		this.cam.transform.localPosition = this.cam.transform.localPosition + (Vector3.up * controller.mouseScroll * this.scrollAcceleration);
 	}
 
 	private void RotateRight(){
