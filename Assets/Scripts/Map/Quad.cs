@@ -5,6 +5,7 @@ public abstract class Quad{
 	protected bool built = false;
 	protected GameObject obj;
 	protected byte ownedBy; //playerId
+	protected ushort rotation = 0; 
 
 	public static Quad Create(Biome b){
 		switch(b){
@@ -41,10 +42,11 @@ public abstract class Quad{
 
 	public int GetT(){return (int)this.type;}
 	public Biome GetBiome(){return this.type;}
+	public void SetRotation(ushort val){this.rotation = val;}
 
 	public void Build(Vector3 pos, GameObject preset, GameObject parent, Material[] mat){
 		if(!this.built){
-			this.obj = GameObject.Instantiate(preset, pos, Quaternion.Euler(90, 0, 0));
+			this.obj = GameObject.Instantiate(preset, pos, Quaternion.Euler(90, this.rotation, 0));
 			this.obj.name = this.GetBiome().ToString() + " (" + (int)pos.x + ", " + (int)pos.z + ")";
 			this.obj.GetComponent<MeshRenderer>().material = Material.Instantiate(mat[(int)this.type]);
 			this.obj.transform.SetParent(parent.transform);

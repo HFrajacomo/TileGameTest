@@ -112,41 +112,72 @@ public class MapGenerator : MonoBehaviour {
     public void GenerateBeaches(GameMap map){
         int mapSize = map.GetSize();
         Quad neiQuad;
+        int iCount, jCount;
+        bool ip, im, jp, jm;
 
         for(int i=0; i < mapSize; i++){
             for(int j=0; j < mapSize; j++){
+                iCount = 0;
+                jCount = 0;
+                ip = false;
+                im = false;
+                jp = false;
+                jm = false;
+
                 if(map.GetQuad(i, j).GetBiome() != Biome.NOTHING)
                     continue;
 
                 if(i > 0){
                     neiQuad = map.GetQuad(i-1, j);
                     if(IsContinent(neiQuad)){
-                        map.SetQuad(i, j, Quad.Create(Biome.BEACH));
-                        continue;
+                        iCount++;
+                        ip = true;
                     }
                 }
                 if(i < mapSize-1){
                     neiQuad = map.GetQuad(i+1, j);
 
                     if(IsContinent(neiQuad)){
-                        map.SetQuad(i, j, Quad.Create(Biome.BEACH));
-                        continue;
+                        iCount++;
+                        im = true;
                     }
                 }
                 if(j > 0){
                     neiQuad = map.GetQuad(i, j-1);
                     if(IsContinent(neiQuad)){
-                        map.SetQuad(i, j, Quad.Create(Biome.BEACH));
-                        continue;
+                        jCount++;
+                        jp = true;
                     }
                 }
                 if(j < mapSize-1){
                     neiQuad = map.GetQuad(i, j+1);
 
                     if(IsContinent(neiQuad)){
-                        map.SetQuad(i, j, Quad.Create(Biome.BEACH));
-                        continue;
+                        jCount++;
+                        jm = true;
                     }
+                }
+
+                // If should stay NOTHING
+                if(iCount + jCount >= 3 || ((iCount == 2 && jCount == 0) || (iCount == 0 && jCount == 2)) || iCount + jCount == 0){
+                    map.SetQuad(i,j, Quad.Create(Biome.NOTHING));
+                }
+                // If should become BEACH
+                else if(iCount + jCount == 1 || (iCount == 1 && jCount == 1)){
+                    neiQuad = Quad.Create(Biome.BEACH);
+
+                    // Find rotation
+                    if(ip)
+                        neiQuad.SetRotation(180);
+                    else if(im)
+                        neiQuad.SetRotation(0);
+                    else if(jp)
+                        neiQuad.SetRotation(90);
+                    else if(jm)
+                        neiQuad.SetRotation(270);
+
+
+                    map.SetQuad(i,j, neiQuad);
                 }
             }
         }

@@ -69,6 +69,5 @@ public class MainControllerManager : MonoBehaviour
     }
     public void OnMouseScroll(InputValue val){
         this.mouseScroll = val.Get<float>()/120;
-        Debug.Log(this.mouseScroll);
     }
 }
